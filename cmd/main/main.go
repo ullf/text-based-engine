@@ -30,6 +30,9 @@ func main() {
 	q := structure.CreateQuest("first","description 1",steps)
 	fmt.Println(q.Step[0].Action.Action)
 	q.Do(0)
-	inv := structure.CreateInventory("inv")
-	fmt.Println(inv)
+	inv := structure.CreateInventory(&hero)
+	ball := structure.CreateItem("ball")
+	inv.PutItem(ball)
+	inv.PutItem(ball)
+	fmt.Println(" ",inv.Items)
 }
