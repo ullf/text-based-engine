@@ -2,11 +2,11 @@ package structure
 
 import "fmt"
 
-type hero struct {
-	Id       int
-	Name     string
-	location *Node
-	//...
+type Hero struct {
+	Id         int
+	Name       string
+	location   *Node
+	takenQuest *quest
 }
 
 type hero_functions interface {
@@ -17,20 +17,20 @@ type hero_functions interface {
 	GoForward(array []Node, where string)
 }
 
-func CreateHero(name string) hero {
-	new_hero := &hero{Id: 0, Name: name}
+func CreateHero(name string) Hero {
+	new_hero := &Hero{Id: 0, Name: name}
 	return *new_hero
 }
 
-func (hero *hero) GetName() string {
+func (hero *Hero) GetName() string {
 	return hero.Name
 }
 
-func (hero *hero) GetLocation() Node {
+func (hero *Hero) GetLocation() Node {
 	return *hero.location
 }
 
-func (hero *hero) GetNearbyLocations(array []Node) {
+func (hero *Hero) GetNearbyLocations(array []Node) {
 	loc := hero.GetLocation()
 	for i, e := range array {
 		if loc.Id == e.Id {
@@ -40,13 +40,13 @@ func (hero *hero) GetNearbyLocations(array []Node) {
 
 }
 
-func (hero *hero) SetLocation(array []Node, location string) Node {
+func (hero *Hero) SetLocation(array []Node, location string) Node {
 	loc := FindElementByName(array, location)
 	hero.location = &loc
 	return array[loc.Id]
 }
 
-func (hero *hero) Move(array []Node, where string) Node {
+func (hero *Hero) Move(array []Node, where string) Node {
 	ret := FindElementByName(array, where)
 	if ret.Id >= 0 {
 		hero.SetLocation(array, ret.Name)
@@ -54,7 +54,7 @@ func (hero *hero) Move(array []Node, where string) Node {
 	return ret
 }
 
-func (hero *hero) WalkTo(array []Node, where string) {
+func (hero *Hero) WalkTo(array []Node, where string) {
 	ret := FindElementByName(array, where)
 	id := hero.GetLocation().Id
 	for ret.Id >= 0 {

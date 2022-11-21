@@ -1,5 +1,8 @@
 package structure
 
+import (
+	"fmt"
+)
 /*
 0 - lookup
 1 - WalkTo
@@ -11,9 +14,9 @@ type action struct {
 	Action   int
 }
 
-type questStep struct {
+type QuestStep struct {
 	QuestId int
-	Hero    *hero
+	Hero    *Hero
 	Action  *action
 }
 
@@ -21,8 +24,10 @@ type quest struct {
 	QuestId     int
 	Name        string
 	Description string
-	Step        []questStep
+	Step        []QuestStep
 }
+
+var allQuests []quest = []quest{}
 
 type questFunctions interface {
 	Do(questId int) bool
@@ -34,13 +39,26 @@ func CreateAction(name string, todo int) action {
 	return *act
 }
 
-func CreateSteps(h *hero, a *action) questStep {
-	s := &questStep{Hero: h, Action: a}
-
+func CreateStep(h *Hero, a *action) QuestStep {
+	s := &QuestStep{Hero: h, Action: a}
 	return *s
 }
 
-func CreateQuest(name string, description string, steps []questStep) quest {
-	q := &quest{Name: name, Description: description, Step: steps}
+func CreateQuest(name string, description string, steps []QuestStep) quest {
+	q := &quest{QuestId: len(allQuests),Name: name, Description: description, Step: steps}
+	allQuests = append(allQuests,*q)
 	return *q
+}
+
+func (quest *quest) Do(questId int) bool {
+	for i,_ := range(allQuests) {
+		if i == questId {
+			fmt.Println("i: ",i)
+		}
+	}
+	return false
+}
+
+func (quest *quest) Check(questId int) bool {
+	return false
 }
