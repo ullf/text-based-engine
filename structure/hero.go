@@ -1,6 +1,8 @@
 package structure
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type Hero struct {
 	Id         int

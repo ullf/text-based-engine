@@ -3,6 +3,7 @@ package structure
 import (
 	"fmt"
 )
+
 /*
 0 - lookup
 1 - WalkTo
@@ -45,15 +46,15 @@ func CreateStep(h *Hero, a *action) QuestStep {
 }
 
 func CreateQuest(name string, description string, steps []QuestStep) quest {
-	q := &quest{QuestId: len(allQuests),Name: name, Description: description, Step: steps}
-	allQuests = append(allQuests,*q)
+	q := &quest{QuestId: len(allQuests), Name: name, Description: description, Step: steps}
+	allQuests = append(allQuests, *q)
 	return *q
 }
 
 func (quest *quest) Do(questId int) bool {
-	for i,_ := range(allQuests) {
+	for i, _ := range allQuests {
 		if i == questId {
-			fmt.Println("i: ",i)
+			fmt.Println("i: ", i)
 		}
 	}
 	return false

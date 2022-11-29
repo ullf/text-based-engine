@@ -5,7 +5,7 @@ type item struct {
 }
 
 type Inventory struct {
-	Hero *Hero
+	Hero  *Hero
 	Items []item
 }
 
@@ -24,5 +24,5 @@ func CreateInventory(h *Hero) Inventory {
 }
 
 func (i *Inventory) PutItem(it item) {
-	i.Items = append(i.Items,it)
+	i.Items = append(i.Items, it)
 }

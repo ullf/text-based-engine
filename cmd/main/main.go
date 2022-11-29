@@ -3,11 +3,11 @@ package main
 import (
 	//"log"
 	"fmt"
-	"text-based-engine/structure"
+
+	"github.com/ullf/text-based-engine/structure"
 )
 
 func main() {
-	fmt.Println("Hello")
 	arr := structure.CreateArrOfNodes()
 	arr = structure.AppendElemToArr(arr, "10")
 	arr = structure.AppendElemToArr(arr, "20")
@@ -20,19 +20,19 @@ func main() {
 	structure.AddChildToNodeByName(arr, "20", &elem1)
 	structure.AddChildToNodeByName(arr, "20", &elem1)
 	hero := structure.CreateHero("mark")
-	hero.SetLocation(arr,"30")
-	fmt.Println(arr,"\nlocation: ",hero.GetLocation())	
+	hero.SetLocation(arr, "30")
+	fmt.Println(arr, "\nlocation: ", hero.GetLocation())
 
-	act := structure.CreateAction("lookup",0)
-	step := structure.CreateStep(&hero,&act)
-	steps := make([]structure.QuestStep,0)
-	steps = append(steps,step)
-	q := structure.CreateQuest("first","description 1",steps)
+	act := structure.CreateAction("lookup", 0)
+	step := structure.CreateStep(&hero, &act)
+	steps := make([]structure.QuestStep, 0)
+	steps = append(steps, step)
+	q := structure.CreateQuest("first", "description 1", steps)
 	fmt.Println(q.Step[0].Action.Action)
 	q.Do(0)
 	inv := structure.CreateInventory(&hero)
 	ball := structure.CreateItem("ball")
 	inv.PutItem(ball)
 	inv.PutItem(ball)
-	fmt.Println(" ",inv.Items)
+	fmt.Println(" ", inv.Items)
 }
