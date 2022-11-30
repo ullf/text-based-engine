@@ -1,7 +1,6 @@
 package main
 
 import (
-	//"log"
 	"fmt"
 
 	"github.com/ullf/text-based-engine/structure"
@@ -9,20 +8,20 @@ import (
 
 func main() {
 	arr := structure.CreateArrOfNodes()
-	arr = structure.AppendElemToArr(arr, "10")
-	arr = structure.AppendElemToArr(arr, "20")
-	arr = structure.AppendElemToArr(arr, "30")
-	arr = structure.AppendElemToArr(arr, "40")
+	arr = structure.AppendElemToArr(arr, "moscow")
+	arr = structure.AppendElemToArr(arr, "petersburg")
+	arr = structure.AppendElemToArr(arr, "novgorod")
+	arr = structure.AppendElemToArr(arr, "tula")
 
-	structure.FindElementById(arr, 0)
-	structure.FindElementById(arr, 1)
-	elem1 := structure.FindElementById(arr, 3)
-	structure.AddChildToNodeByName(arr, "20", &elem1)
-	structure.AddChildToNodeByName(arr, "20", &elem1)
+	peters := structure.FindElementByName(arr, "petersburg")
+	//elem1 := structure.FindElementById(arr, 3)
+	structure.AddChildToNodeByName(arr, "moscow", &peters)
+	//structure.AddChildToNodeByName(arr, "20", &elem1)
 	hero := structure.CreateHero("mark")
-	hero.SetLocation(arr, "30")
+	hero.SetLocation(arr, "moscow")
 	fmt.Println(arr, "\nlocation: ", hero.GetLocation())
-
+	hero.WalkTo(arr,"petersburg")
+	fmt.Println(arr, "\nlocation: ", hero.GetLocation())
 	act := structure.CreateAction("lookup", 0)
 	step := structure.CreateStep(&hero, &act)
 	steps := make([]structure.QuestStep, 0)
@@ -35,4 +34,6 @@ func main() {
 	inv.PutItem(ball)
 	inv.PutItem(ball)
 	fmt.Println(" ", inv.Items)
+	fmt.Println("-----")
+	structure.GetListOfAllItems("inventory_objects/all_objects")
 }

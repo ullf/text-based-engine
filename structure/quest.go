@@ -31,8 +31,8 @@ type quest struct {
 var allQuests []quest = []quest{}
 
 type questFunctions interface {
-	Do(questId int) bool
-	Check(questId int) bool
+	Do(questId *quest) bool
+	Check(questId *quest) bool
 }
 
 func CreateAction(name string, todo int) action {

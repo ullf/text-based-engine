@@ -57,18 +57,14 @@ func (hero *Hero) Move(array []Node, where string) Node {
 }
 
 func (hero *Hero) WalkTo(array []Node, where string) {
-	ret := FindElementByName(array, where)
-	id := hero.GetLocation().Id
-	for ret.Id >= 0 {
-		if array[ret.Id].Id > hero.GetLocation().Id {
-			id++
-			hero.SetLocation(array, array[id].Name)
-		} else {
-			id--
-			hero.SetLocation(array, array[id].Name)
-		}
-		if hero.GetLocation().Name == where {
-			break
+	for _,e := range(array) {
+		if len(e.Next) > 0 {
+			for _,inner := range(e.Next) {
+				if inner.Name == where {
+					hero.SetLocation(array,where)
+					break
+				}
+			}
 		}
 	}
 }
