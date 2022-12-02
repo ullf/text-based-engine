@@ -32,13 +32,16 @@ func (hero *Hero) GetLocation() Node {
 	return *hero.location
 }
 
-func (hero *Hero) GetNearbyLocations(array []Node) {
+func (hero *Hero) GetNearbyLocations(array []Node) []Node {
 	loc := hero.GetLocation()
+	nearby := make([]Node,0)
 	for i, e := range array {
 		if loc.Id == e.Id {
+			nearby = array[i].Next
 			fmt.Println("Nearby locs: ", array[i].Next)
 		}
 	}
+	return nearby
 
 }
 
@@ -60,9 +63,14 @@ func (hero *Hero) WalkTo(array []Node, where string) {
 	for _,e := range(array) {
 		if len(e.Next) > 0 {
 			for _,inner := range(e.Next) {
-				if inner.Name == where {
+				if inner.Name == where{
 					hero.SetLocation(array,where)
 					break
+				} else {
+					//fmt.Println(array)
+					tmp := hero.GetNearbyLocations(array)
+					hero.SetLocation(array,tmp[0].Name)
+					//hero.WalkTo(tmp,tmp[0].Next.Name)
 				}
 			}
 		}

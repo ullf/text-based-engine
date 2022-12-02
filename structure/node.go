@@ -53,6 +53,7 @@ func AddChildToNodeById(array []Node, id int, new_node *Node) {
 	for _, e := range array {
 		if e.Id == id {
 			array[id].Next = append(e.Next, *new_node)
+			array[new_node.Id].Next = append(new_node.Next,array[e.Id])
 			break
 		}
 	}
@@ -62,6 +63,7 @@ func AddChildToNodeByName(array []Node, name string, new_node *Node) {
 	for i, e := range array {
 		if e.Name == name {
 			array[i].Next = append(e.Next, *new_node)
+			array[new_node.Id].Next = append(new_node.Next,array[e.Id])
 			break
 		}
 	}
