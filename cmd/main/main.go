@@ -14,17 +14,30 @@ func main() {
 	arr = structure.AppendElemToArr(arr, "helsinki")
 
 	berlin := structure.FindElementByName(arr, "berlin")
+	paris := structure.FindElementByName(arr, "paris")
 	//elem1 := structure.FindElementById(arr, 3)
-	structure.AddChildToNodeByName(arr, "madrid", &berlin)
-	structure.AddChildToNodeByName(arr, "helsinki", &berlin)
+	if berlin.Id >= 0 {
+		arr[1].AddChildToNodeByName(arr, "madrid", &berlin, 0)
+		arr[3].AddChildToNodeByName(arr, "helsinki", &berlin, 0)
+		arr[3].AddChildToNodeByName(arr, "helsinki", &paris, 0)
+		//fmt.Println("Check : ", berlin.Id)
+	} else {
+		panic("error")
+	}
+
 	//structure.AddChildToNodeByName(arr, "20", &elem1)
 	hero := structure.CreateHero("mark")
 	hero.SetLocation(arr, "helsinki")
-	fmt.Println(arr, "\nlocation: ", hero.GetLocation())
-	hero.WalkTo(arr,"madrid")
-	fmt.Println(arr, "\nlocation: ", hero.GetLocation())
-	hero.GetNearbyLocations(arr)
-	act := structure.CreateAction("lookup", 0)
+	//hero.GetNearbyLocations(arr)
+	fmt.Println("\nlocation: ", hero.GetLocationAsString())
+	hero.WalkTo(arr, "madrid")
+	fmt.Println("\nlocation: ", hero.GetLocationAsString())
+	//fmt.Println(arr)
+	structure.PrintAll(arr[1].Next, arr[1].Name)
+	structure.PrintAll(arr[3].Next, arr[3].Name)
+	//fmt.Print("Check: ")
+	//hero.GetNearbyLocations(arr)
+	/*act := structure.CreateAction("lookup", 0)
 	step := structure.CreateStep(&hero, &act)
 	steps := make([]structure.QuestStep, 0)
 	steps = append(steps, step)
@@ -37,5 +50,5 @@ func main() {
 	inv.PutItem(ball)
 	fmt.Println(" ", inv.Items)
 	fmt.Println("-----")
-	structure.GetListOfAllItems("inventory_objects/all_objects")
+	structure.GetListOfAllItems("inventory_objects/all_objects")*/
 }
