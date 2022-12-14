@@ -30,7 +30,7 @@ type quest struct {
 
 var allQuests []quest = []quest{}
 
-type questFunctions interface {
+type QuestFunctions interface {
 	Do(questId *quest) bool
 	Check(questId *quest) bool
 }

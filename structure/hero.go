@@ -6,10 +6,10 @@ type Hero struct {
 	Id         int
 	Name       string
 	location   *Node
-	takenQuest *quest
+	TakenQuest *quest
 }
 
-type hero_functions interface {
+type Hero_functions interface {
 	GetName() string
 	SetLocation(array []Node, location string)
 	GetLocation() Node
@@ -93,21 +93,21 @@ func PrintAll(array []*Node, location string) {
 }
 
 func (hero *Hero) WalkTo(array []Node, where string) {
-	for i, e := range array {
-		if len(e.Next) > 0 {
-			for _, inner := range e.Next {
-				//PrintAll(e.Next)
-				if i == len(array)-1 && inner.Name != where {
-					hero.SetLocation(array, inner.Name)
-					fmt.Println("RR ", hero.GetLocationAsString(), hero.GetNearbyLocationsAsStrings(array))
-					//fmt.Println("ddddd")
-					hero.WalkTo(array, where)
-				}
-				if inner.Name == where {
-					hero.SetLocation(array, where)
-					break
-				}
-			}
+	current := ""
+	//i := 0
+	//for _, e := range array {
+	tmp := hero.GetNearbyLocations(array)
+	for i := range tmp {
+		fmt.Println(tmp[i].Name)
+		current = tmp[i].Name
+		if tmp[i].Name != where {
+			fmt.Println("RR ", current, " ", i, " ", hero.GetLocationAsString(), hero.GetNearbyLocationsAsStrings(array))
 		}
+	}
+	if current == where {
+		hero.SetLocation(array, where)
+	} else {
+		//hero.WalkTo(array, where)
+		fmt.Println("No road")
 	}
 }

@@ -34,7 +34,7 @@ func main() {
 	fmt.Println("\nlocation: ", hero.GetLocationAsString())
 	//fmt.Println(arr)
 	structure.PrintAll(arr[1].Next, arr[1].Name)
-	structure.PrintAll(arr[3].Next, arr[3].Name)
+	structure.PrintAll(arr[0].Next, arr[0].Name)
 	//fmt.Print("Check: ")
 	//hero.GetNearbyLocations(arr)
 	/*act := structure.CreateAction("lookup", 0)
