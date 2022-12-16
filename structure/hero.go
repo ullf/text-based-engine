@@ -9,12 +9,13 @@ type Hero struct {
 	TakenQuest *quest
 }
 
-type Hero_functions interface {
+type HeroFunctions interface {
 	GetName() string
 	SetLocation(array []Node, location string)
 	GetLocation() Node
 	Move(array []Node, where string) Node
 	GoForward(array []Node, where string)
+	WalkTo(array []Node, where string) bool
 }
 
 func CreateHero(name string) Hero {
@@ -50,6 +51,22 @@ func (hero *Hero) GetNearbyLocations(array []Node) []*Node {
 	return nearby
 }
 
+func (hero *Hero) GetNearbyLocationsAsStringsOf(array []Node, of string) []string {
+	node := FindElementByName(array, of)
+	nearby := make([]string, 0)
+	for i, e := range array {
+		if node.Id == e.Id {
+			if len(array[i].Next) > 0 {
+				for _, e2 := range array[i].Next {
+					nearby = append(nearby, e2.Name)
+				}
+			}
+		}
+
+	}
+	return nearby
+}
+
 func (hero *Hero) GetNearbyLocationsAsStrings(array []Node) []string {
 	loc := hero.GetLocation()
 	nearby := make([]string, 0)
@@ -66,8 +83,6 @@ func (hero *Hero) GetNearbyLocationsAsStrings(array []Node) []string {
 	}
 	return nearby
 }
-
-//fmt.Println("nearby locs: ", nearby)
 
 func (hero *Hero) SetLocation(array []Node, location string) Node {
 	loc := FindElementByName(array, location)
@@ -92,22 +107,27 @@ func PrintAll(array []*Node, location string) {
 	fmt.Println("...............")
 }
 
-func (hero *Hero) WalkTo(array []Node, where string) {
+func (hero *Hero) WalkTo(array []Node, where string) bool {
 	current := ""
-	//i := 0
-	//for _, e := range array {
 	tmp := hero.GetNearbyLocations(array)
 	for i := range tmp {
-		fmt.Println(tmp[i].Name)
 		current = tmp[i].Name
 		if tmp[i].Name != where {
+			tmp2 := hero.GetNearbyLocationsAsStringsOf(array, tmp[i].Name)
+			for _, el := range tmp2 {
+				if el == where {
+					hero.SetLocation(array, where)
+					return true
+				}
+			}
 			fmt.Println("RR ", current, " ", i, " ", hero.GetLocationAsString(), hero.GetNearbyLocationsAsStrings(array))
 		}
 	}
 	if current == where {
 		hero.SetLocation(array, where)
+		return true
 	} else {
-		//hero.WalkTo(array, where)
-		fmt.Println("No road")
+		fmt.Println("No road ", hero.GetLocation())
+		return false
 	}
 }

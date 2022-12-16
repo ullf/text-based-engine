@@ -18,7 +18,7 @@ func main() {
 	//elem1 := structure.FindElementById(arr, 3)
 	if berlin.Id >= 0 {
 		arr[1].AddChildToNodeByName(arr, "madrid", &berlin, 0)
-		arr[3].AddChildToNodeByName(arr, "helsinki", &berlin, 0)
+		//arr[3].AddChildToNodeByName(arr, "helsinki", &berlin, 0)
 		arr[3].AddChildToNodeByName(arr, "helsinki", &paris, 0)
 		//fmt.Println("Check : ", berlin.Id)
 	} else {
@@ -30,7 +30,8 @@ func main() {
 	hero.SetLocation(arr, "helsinki")
 	//hero.GetNearbyLocations(arr)
 	fmt.Println("\nlocation: ", hero.GetLocationAsString())
-	hero.WalkTo(arr, "madrid")
+	bb := hero.WalkTo(arr, "berlin")
+	fmt.Println("bool: ", bb)
 	fmt.Println("\nlocation: ", hero.GetLocationAsString())
 	//fmt.Println(arr)
 	structure.PrintAll(arr[1].Next, arr[1].Name)
