@@ -15,6 +15,7 @@ func main() {
 
 	berlin := structure.FindElementByName(arr, "berlin")
 	paris := structure.FindElementByName(arr, "paris")
+	hlog := structure.NewHeroLog(-1, "", "")
 	//elem1 := structure.FindElementById(arr, 3)
 	if berlin.Id >= 0 {
 		arr[1].AddChildToNodeByName(arr, "madrid", &berlin, 0)
@@ -30,7 +31,7 @@ func main() {
 	hero.SetLocation(arr, "helsinki")
 	//hero.GetNearbyLocations(arr)
 	fmt.Println("\nlocation: ", hero.GetLocationAsString())
-	bb := hero.WalkTo(arr, "berlin")
+	bb := hero.WalkTo(arr, "berlin", hlog)
 	fmt.Println("bool: ", bb)
 	fmt.Println("\nlocation: ", hero.GetLocationAsString())
 	//fmt.Println(arr)
@@ -52,4 +53,13 @@ func main() {
 	fmt.Println(" ", inv.Items)
 	fmt.Println("-----")
 	structure.GetListOfAllItems("inventory_objects/all_objects")*/
+	act := structure.CreateAction("lookup", 0)
+	step := structure.CreateStep(&hero, &act)
+	steps := make([]structure.QuestStep, 0)
+	hero.GetNearbyLocationsAsStrings(arr, hlog)
+	hlog.HWrite(*hlog, "data")
+	hlog.HRead("data")
+	steps = append(steps, step)
+	q := structure.CreateQuest("first", "description 1", steps)
+	fmt.Println(q.Step[0].Action.Action)
 }

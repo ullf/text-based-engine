@@ -14,8 +14,7 @@ type HeroFunctions interface {
 	SetLocation(array []Node, location string)
 	GetLocation() Node
 	Move(array []Node, where string) Node
-	GoForward(array []Node, where string)
-	WalkTo(array []Node, where string) bool
+	WalkTo(array []Node, where string, herolog *HeroLog) bool
 }
 
 func CreateHero(name string) Hero {
@@ -67,7 +66,7 @@ func (hero *Hero) GetNearbyLocationsAsStringsOf(array []Node, of string) []strin
 	return nearby
 }
 
-func (hero *Hero) GetNearbyLocationsAsStrings(array []Node) []string {
+func (hero *Hero) GetNearbyLocationsAsStrings(array []Node, heroLog *HeroLog) []string {
 	loc := hero.GetLocation()
 	nearby := make([]string, 0)
 	for i, e := range array {
@@ -79,8 +78,9 @@ func (hero *Hero) GetNearbyLocationsAsStrings(array []Node) []string {
 
 			}
 		}
-
 	}
+	heroLog.HLog(hero, 0, "GetNearbyLocationsAsStrings", hero.GetLocationAsString())
+	fmt.Println("Log: ", heroLog.Function, "++")
 	return nearby
 }
 
@@ -107,7 +107,7 @@ func PrintAll(array []*Node, location string) {
 	fmt.Println("...............")
 }
 
-func (hero *Hero) WalkTo(array []Node, where string) bool {
+func (hero *Hero) WalkTo(array []Node, where string, herolog *HeroLog) bool {
 	current := ""
 	tmp := hero.GetNearbyLocations(array)
 	for i := range tmp {
@@ -120,7 +120,7 @@ func (hero *Hero) WalkTo(array []Node, where string) bool {
 					return true
 				}
 			}
-			fmt.Println("RR ", current, " ", i, " ", hero.GetLocationAsString(), hero.GetNearbyLocationsAsStrings(array))
+			fmt.Println("RR ", current, " ", i, " ", hero.GetLocationAsString(), hero.GetNearbyLocationsAsStrings(array, herolog))
 		}
 	}
 	if current == where {

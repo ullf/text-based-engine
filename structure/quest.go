@@ -1,12 +1,10 @@
 package structure
 
-import (
-	"fmt"
-)
+import "fmt"
 
 /*
-0 - lookup
-1 - WalkTo
+0 - lookup (GetNearbyLocationsAsStrings)
+1 - WalkTo (WalkTo)
 */
 var listOfActions []int = []int{0, 1, 2, 3}
 
@@ -22,16 +20,17 @@ type QuestStep struct {
 }
 
 type quest struct {
-	QuestId     int
-	Name        string
-	Description string
-	Step        []QuestStep
+	QuestId      int
+	Name         string
+	QuestTakenBy *Hero
+	Description  string
+	Step         []QuestStep
 }
 
 var allQuests []quest = []quest{}
 
 type QuestFunctions interface {
-	Do(questId *quest) bool
+	Do(hero *Hero, questId *quest) bool
 	Check(questId *quest) bool
 }
 
@@ -51,10 +50,12 @@ func CreateQuest(name string, description string, steps []QuestStep) quest {
 	return *q
 }
 
-func (quest *quest) Do(questId int) bool {
-	for i, _ := range allQuests {
+func (quest *quest) Do(hero *Hero, questId int) bool {
+	for i := range allQuests {
 		if i == questId {
+			quest.QuestTakenBy = hero
 			fmt.Println("i: ", i)
+
 		}
 	}
 	return false
