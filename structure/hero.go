@@ -79,8 +79,8 @@ func (hero *Hero) GetNearbyLocationsAsStrings(array []Node, heroLog *HeroLog) []
 			}
 		}
 	}
+
 	heroLog.HLog(hero, 0, "GetNearbyLocationsAsStrings", hero.GetLocationAsString())
-	fmt.Println("Log: ", heroLog.Function, "++")
 	return nearby
 }
 
@@ -120,14 +120,17 @@ func (hero *Hero) WalkTo(array []Node, where string, herolog *HeroLog) bool {
 					return true
 				}
 			}
-			fmt.Println("RR ", current, " ", i, " ", hero.GetLocationAsString(), hero.GetNearbyLocationsAsStrings(array, herolog))
+			//fmt.Println("RR ", current, " ", i, " ", hero.GetLocationAsString(), hero.GetNearbyLocationsAsStrings(array, herolog))
 		}
 	}
 	if current == where {
 		hero.SetLocation(array, where)
+		herolog.HLog(hero, 1, "WalkTo", hero.GetLocationAsString())
 		return true
 	} else {
 		fmt.Println("No road ", hero.GetLocation())
+		herolog.HLog(hero, 1, "WalkTo", hero.GetLocationAsString())
 		return false
 	}
+
 }

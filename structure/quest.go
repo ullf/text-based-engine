@@ -50,17 +50,29 @@ func CreateQuest(name string, description string, steps []QuestStep) quest {
 	return *q
 }
 
-func (quest *quest) Do(hero *Hero, questId int) bool {
+func (quest *quest) Do(hero *Hero, questId int, herolog *HeroLog) bool {
 	for i := range allQuests {
 		if i == questId {
 			quest.QuestTakenBy = hero
-			fmt.Println("i: ", i)
+			herolog.HLogQ(hero, 2, "Do", quest.QuestId)
+			return true
+			//fmt.Println("i: ", i)
 
 		}
 	}
 	return false
 }
 
-func (quest *quest) Check(questId int) bool {
+func (quest *quest) Check(questId int, data HeroLogs) bool {
+	for _, e := range allQuests {
+		if e.QuestId == questId {
+			for i, elem := range data.Hlogs {
+				if i < len(e.Step) && elem.Action == e.Step[i].Action.Action {
+					fmt.Println("Done")
+					return true
+				}
+			}
+		}
+	}
 	return false
 }
