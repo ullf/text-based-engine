@@ -7,29 +7,29 @@ import (
 	"os"
 )
 
-type HeroLog struct {
+type QuestLog struct {
 	Action   int    `json:"action"`
 	Function string `json:"function"`
 	Location string `json:"location"`
 	QuestId  int    `json:"questId"`
 }
 
-type HeroLogs struct {
-	Hlogs []HeroLog `json:"hlogs"`
+type QuestLogs struct {
+	Hlogs []QuestLog `json:"hlogs"`
 }
 
 type HeroLogInt interface {
-	HLog(h *Hero, action int, function string, location string) *HeroLog
-	HWrite(data HeroLog, filename string)
-	HRead(filename string) HeroLogs
+	HLog(h *Hero, action int, function string, location string) *QuestLog
+	HWrite(data QuestLog, filename string) QuestLogs
+	HRead(filename string) QuestLogs
 }
 
 type HeroLogsInt interface {
-	AppendHeroLog(hl *HeroLog)
+	AppendHeroLog(hl *QuestLog)
 }
 
-func NewHeroLog(action int, function string, location string) *HeroLog {
-	log := &HeroLog{
+func NewHeroLog(action int, function string, location string) *QuestLog {
+	log := &QuestLog{
 		Action:   action,
 		Function: function,
 		Location: location,
@@ -37,21 +37,21 @@ func NewHeroLog(action int, function string, location string) *HeroLog {
 	return log
 }
 
-func NewHeroLogs(hl []HeroLog) *HeroLogs {
-	log := &HeroLogs{
+func NewHeroLogs(hl []QuestLog) *QuestLogs {
+	log := &QuestLogs{
 		Hlogs: hl,
 	}
 	return log
 }
 
-func (hl *HeroLog) HLog(h *Hero, action int, function string, location string) *HeroLog {
+/*func (hl *HeroLog) HLog(h *Hero, action int, function string, location string) *HeroLog {
 	hl.Action = action
 	hl.Function = function
 	hl.Location = location
 	return hl
-}
+}*/
 
-func (hl *HeroLog) HLogQuest(h *Hero, action int, function string, questId int) *HeroLog {
+func (hl *QuestLog) HLogQuest(h *Hero, action int, function string, questId int) *QuestLog {
 	hl.Action = action
 	hl.Function = function
 	hl.Location = h.GetLocationAsString()
@@ -59,18 +59,18 @@ func (hl *HeroLog) HLogQuest(h *Hero, action int, function string, questId int) 
 	return hl
 }
 
-func (hls *HeroLogs) AppendHeroLog(hl *HeroLog) {
+func (hls *QuestLogs) AppendHeroLog(hl *QuestLog) {
 	if hls.Hlogs != nil {
 		hls.Hlogs = append(hls.Hlogs, *hl)
 	} else {
-		hls.Hlogs = make([]HeroLog, 0)
+		hls.Hlogs = make([]QuestLog, 0)
 		hls.Hlogs = append(hls.Hlogs, *hl)
 	}
 	fmt.Println(hls)
 
 }
 
-func (hl *HeroLog) HWrite(data HeroLogs, filename string) {
+func (hl *QuestLogs) HWrite(data QuestLogs, filename string) {
 	file, err := os.OpenFile(filename+".json", os.O_CREATE|os.O_RDWR, 0644)
 	if err != nil {
 		panic(err)
@@ -85,9 +85,9 @@ func (hl *HeroLog) HWrite(data HeroLogs, filename string) {
 	defer file.Close()
 }
 
-func (hl *HeroLog) HRead(filename string) HeroLogs {
+func (hl *QuestLogs) HRead(filename string) QuestLogs {
 	file, err := os.Open(filename + ".json")
-	var output HeroLogs
+	var output QuestLogs
 	if err != io.EOF {
 		// Decode the JSON data into a user object
 		decoder := json.NewDecoder(file)

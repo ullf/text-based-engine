@@ -1,12 +1,16 @@
 package structure
 
-import "fmt"
+import (
+	"encoding/json"
+	"fmt"
+	"os"
+)
 
 type Hero struct {
-	Id         int
-	Name       string
-	location   *Node
-	TakenQuest *Quest
+	Id         int    `json:"id"`
+	Name       string `json:"name"`
+	Location   *Node  `json:"location"`
+	TakenQuest *Quest `json:"takenQuest"`
 }
 
 type HeroFunctions interface {
@@ -14,7 +18,9 @@ type HeroFunctions interface {
 	SetLocation(array []Node, location string)
 	GetLocation() Node
 	Move(array []Node, where string) Node
-	WalkTo(array []Node, where string, herolog *HeroLog) bool
+	WalkTo(array []Node, where string, questlog *QuestLog) bool
+	Stat(array []Node) Hero
+	ReStat() (*Hero, error)
 }
 
 func CreateHero(name string) Hero {
@@ -27,11 +33,11 @@ func (hero *Hero) GetName() string {
 }
 
 func (hero *Hero) GetLocation() Node {
-	return *hero.location
+	return *hero.Location
 }
 
 func (hero *Hero) GetLocationAsString() string {
-	return hero.location.Name
+	return hero.Location.Name
 }
 
 func (hero *Hero) GetNearbyLocations(array []Node) []*Node {
@@ -66,7 +72,7 @@ func (hero *Hero) GetNearbyLocationsAsStringsOf(array []Node, of string) []strin
 	return nearby
 }
 
-func (hero *Hero) GetNearbyLocationsAsStrings(array []Node, heroLog *HeroLog) []string {
+func (hero *Hero) GetNearbyLocationsAsStrings(array []Node) []string {
 	loc := hero.GetLocation()
 	nearby := make([]string, 0)
 	for i, e := range array {
@@ -80,13 +86,13 @@ func (hero *Hero) GetNearbyLocationsAsStrings(array []Node, heroLog *HeroLog) []
 		}
 	}
 
-	heroLog.HLog(hero, 0, "GetNearbyLocationsAsStrings", hero.GetLocationAsString())
+	//heroLog.HLog(hero, 0, "GetNearbyLocationsAsStrings", hero.GetLocationAsString())
 	return nearby
 }
 
 func (hero *Hero) SetLocation(array []Node, location string) Node {
 	loc := FindElementByName(array, location)
-	hero.location = &loc
+	hero.Location = &loc
 	return array[loc.Id]
 }
 
@@ -107,7 +113,7 @@ func PrintAll(array []*Node, location string) {
 	fmt.Println("...............")
 }
 
-func (hero *Hero) WalkTo(array []Node, where string, herolog *HeroLog) bool {
+func (hero *Hero) WalkTo(array []Node, where string) bool {
 	current := ""
 	tmp := hero.GetNearbyLocations(array)
 	for i := range tmp {
@@ -125,12 +131,63 @@ func (hero *Hero) WalkTo(array []Node, where string, herolog *HeroLog) bool {
 	}
 	if current == where {
 		hero.SetLocation(array, where)
-		herolog.HLog(hero, 1, "WalkTo", hero.GetLocationAsString())
+		//herolog.HLog(hero, 1, "WalkTo", hero.GetLocationAsString())
 		return true
 	} else {
 		fmt.Println("No road ", hero.GetLocation())
-		herolog.HLog(hero, 1, "WalkTo", hero.GetLocationAsString())
+		//herolog.HLog(hero, 1, "WalkTo", hero.GetLocationAsString())
 		return false
 	}
+}
 
+func (hero *Hero) Stat(array []Node) Hero {
+	// Marshal the Hero struct into a JSON string
+	jsonData, err := json.Marshal(hero)
+	if err != nil {
+		// handle error
+		return *hero
+	}
+
+	// Write the JSON string to a file
+	file, err := os.Create(hero.Name + ".json")
+	if err != nil {
+		// handle error
+		return *hero
+	}
+	defer file.Close()
+
+	_, err = file.Write(jsonData)
+	if err != nil {
+		// handle error
+		return *hero
+	}
+
+	return *hero
+}
+
+func (hero *Hero) ReStat() (*Hero, error) {
+	// Open the file
+	file, err := os.Open("mark.json")
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+
+	// Read the file into a byte slice
+	data := make([]byte, 10000)
+	_, err = file.Read(data)
+	if err != nil {
+		return nil, err
+	}
+
+	// Unmarshal the byte slice into a Hero struct
+	var h Hero
+	err = json.Unmarshal(data, &h)
+	fmt.Println("h: ", h)
+	if err != nil {
+		fmt.Println("h err: ", err)
+		return nil, err
+	}
+
+	return &h, nil
 }

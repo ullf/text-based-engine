@@ -16,11 +16,6 @@ func main() {
 	berlin := structure.FindElementByName(arr, "berlin")
 	paris := structure.FindElementByName(arr, "paris")
 
-	hlog := structure.NewHeroLog(-1, "", "")
-	hls := structure.NewHeroLogs(nil)
-	hh := *hls
-	hh = hlog.HRead("data")
-
 	//elem1 := structure.FindElementById(arr, 3)
 	if berlin.Id >= 0 {
 		arr[1].AddChildToNodeByName(arr, "madrid", &berlin, 0)
@@ -36,9 +31,7 @@ func main() {
 	hero.SetLocation(arr, "helsinki")
 	//hero.GetNearbyLocations(arr)
 	fmt.Println("\nlocation: ", hero.GetLocationAsString())
-	bb := hero.WalkTo(arr, "paris", hlog)
-	hh.AppendHeroLog(hlog)
-	hlog.HWrite(hh, "data")
+	bb := hero.WalkTo(arr, "paris")
 	fmt.Println("bool: ", bb)
 	fmt.Println("\nlocation: ", hero.GetLocationAsString())
 	//fmt.Println(arr)
@@ -50,16 +43,33 @@ func main() {
 	step := structure.CreateStep(&hero, &act)
 	step2 := structure.CreateStep(&hero, &act2)
 	steps := make([]structure.QuestStep, 0)
-	hero.GetNearbyLocationsAsStrings(arr, hlog)
-	hh.AppendHeroLog(hlog)
-	hlog.HWrite(hh, "data")
+
+	act3 := structure.CreateAction("lookup", 0)
+	act4 := structure.CreateAction("lookup", 0)
+	step3 := structure.CreateStep(&hero, &act3)
+	step4 := structure.CreateStep(&hero, &act4)
+	steps1 := make([]structure.QuestStep, 0)
+
+	steps1 = append(steps1, step3)
+	steps1 = append(steps1, step4)
+
+	hero.GetNearbyLocationsAsStrings(arr)
 	steps = append(steps, step)
 	steps = append(steps, step2)
 	//steps = append(steps, step)
 	q := structure.CreateQuest("first", "description 1", steps)
-	q.Do(&hero, 0, hlog)
-	q.Check(0, hh)
-	hh.AppendHeroLog(hlog)
-	hlog.HWrite(hh, "data")
+	q2 := structure.CreateQuest("second", "description 2", steps1)
+	hlogs := new(structure.QuestLogs)
+	hh := *hlogs
+	//hlogs.Hlogs[0].Action = act.Action
+	hh = q.Do(&hero, 0, hh)
+	qq, err := q2.Check(1)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(qq)
+	hero.Stat(arr)
+	tmp, _ := hero.ReStat()
+	fmt.Println(tmp)
 	//fmt.Println(q.Step[0].Action.Action)
 }
