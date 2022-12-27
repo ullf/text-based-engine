@@ -6,7 +6,7 @@ type Hero struct {
 	Id         int
 	Name       string
 	location   *Node
-	TakenQuest *quest
+	TakenQuest *Quest
 }
 
 type HeroFunctions interface {

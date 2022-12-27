@@ -51,7 +51,7 @@ func (hl *HeroLog) HLog(h *Hero, action int, function string, location string) *
 	return hl
 }
 
-func (hl *HeroLog) HLogQ(h *Hero, action int, function string, questId int) *HeroLog {
+func (hl *HeroLog) HLogQuest(h *Hero, action int, function string, questId int) *HeroLog {
 	hl.Action = action
 	hl.Function = function
 	hl.Location = h.GetLocationAsString()

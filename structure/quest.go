@@ -19,7 +19,7 @@ type QuestStep struct {
 	Action  *action
 }
 
-type quest struct {
+type Quest struct {
 	QuestId      int
 	Name         string
 	QuestTakenBy *Hero
@@ -27,11 +27,11 @@ type quest struct {
 	Step         []QuestStep
 }
 
-var allQuests []quest = []quest{}
+var allQuests []Quest = []Quest{}
 
 type QuestFunctions interface {
-	Do(hero *Hero, questId *quest) bool
-	Check(questId *quest) bool
+	Do(hero *Hero, questId *Quest) bool
+	Check(questId *Quest) bool
 }
 
 func CreateAction(name string, todo int) action {
@@ -44,13 +44,13 @@ func CreateStep(h *Hero, a *action) QuestStep {
 	return *s
 }
 
-func CreateQuest(name string, description string, steps []QuestStep) quest {
-	q := &quest{QuestId: len(allQuests), Name: name, Description: description, Step: steps}
+func CreateQuest(name string, description string, steps []QuestStep) Quest {
+	q := &Quest{QuestId: len(allQuests), Name: name, Description: description, Step: steps}
 	allQuests = append(allQuests, *q)
 	return *q
 }
 
-func (quest *quest) Do(hero *Hero, questId int, herolog *HeroLog) bool {
+func (quest *Quest) Do(hero *Hero, questId int, herolog *HeroLog) bool {
 	for i := range allQuests {
 		if i == questId {
 			quest.QuestTakenBy = hero
@@ -63,15 +63,24 @@ func (quest *quest) Do(hero *Hero, questId int, herolog *HeroLog) bool {
 	return false
 }
 
-func (quest *quest) Check(questId int, data HeroLogs) bool {
+func (quest *Quest) Check(questId int, data HeroLogs) bool {
+	count := 0
 	for _, e := range allQuests {
 		if e.QuestId == questId {
-			for i, elem := range data.Hlogs {
-				if i < len(e.Step) && elem.Action == e.Step[i].Action.Action {
-					fmt.Println("Done")
-					return true
+			for _, elem2 := range e.Step {
+				for _, elem := range data.Hlogs {
+					if elem.Action == elem2.Action.Action {
+						count++
+
+					}
 				}
 			}
+		}
+		if count == len(e.Step) {
+			fmt.Println("Done!")
+			return true
+		} else {
+			fmt.Println("Count: ", count)
 		}
 	}
 	return false
