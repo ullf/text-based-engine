@@ -8,8 +8,8 @@ import (
 /*
 0 - lookup (GetNearbyLocationsAsStrings)
 1 - WalkTo (WalkTo)
+2 - GetAllQuestsinCurrentLocation
 */
-var listOfActions []int = []int{0, 1, 2, 3}
 
 type action struct {
 	HeroName string
@@ -30,7 +30,7 @@ type Quest struct {
 	Step         []QuestStep
 }
 
-var allQuests []Quest = []Quest{}
+var AllQuests []Quest = []Quest{}
 
 type QuestFunctions interface {
 	Do(hero *Hero, questId int, questlogs QuestLogs) QuestLogs
@@ -47,16 +47,19 @@ func CreateStep(h *Hero, a *action) QuestStep {
 	return *s
 }
 
-func CreateQuest(name string, description string, steps []QuestStep) Quest {
-	q := &Quest{QuestId: len(allQuests), Name: name, Description: description, Step: steps}
-	allQuests = append(allQuests, *q)
+func CreateQuest(qs *[]Quest, name string, description string, steps []QuestStep) Quest {
+	q := &Quest{QuestId: len(*qs), Name: name, Description: description, Step: steps}
+	*qs = append(*qs, *q)
+	fmt.Println(q.Name, " Len of allQuests: ", len(*qs))
 	return *q
 }
 
 func (quest *Quest) Do(hero *Hero, questId int, questlogs QuestLogs) QuestLogs {
-	for i := range allQuests {
+	for i := range AllQuests {
 		if i == questId {
+			//fmt.Println("HERO: ", hero)
 			quest.QuestTakenBy = hero
+			hero.TakenQuest = quest.QuestId
 			questlogs.Hlogs = make([]QuestLog, 0)
 
 			for _, st := range quest.Step {
@@ -82,33 +85,50 @@ func (quest *Quest) Check(questId int) (QuestLogs, error) {
 	data := new(QuestLogs)
 	data2 := *data
 
-	for _, e := range allQuests {
+	for _, e := range AllQuests {
 		if e.QuestId != questId {
 			continue
 		}
-
-		if _, err := os.Stat(e.Name); os.IsExist(err) {
-			data2 = data2.HRead(e.Name)
+		name := e.Name + ".json"
+		if _, err := os.Stat(name); os.IsExist(err) {
+			fmt.Println("exists")
+			data2 = data2.HRead(name)
 		} else if os.IsNotExist(err) {
-			return *new(QuestLogs), fmt.Errorf("file %q does not exist", e.Name)
+			return *new(QuestLogs), fmt.Errorf("file %q does not exist", name)
 		} else {
-			return *new(QuestLogs), fmt.Errorf("error checking file %q: %v", e.Name, err)
-		}
-
-		for _, elem2 := range e.Step {
-			for _, elem := range data2.Hlogs {
-				if elem.Action == elem2.Action.Action {
-					count++
+			data2 = data2.HRead(name)
+			for _, elem2 := range e.Step {
+				for _, elem := range data2.Hlogs {
+					if elem.Action == elem2.Action.Action {
+						count++
+					}
 				}
 			}
-		}
 
-		if count == len(e.Step) {
-			return data2, nil
-		} else {
-			fmt.Println("Count: ", count)
+			if count == len(e.Step) {
+				fmt.Println("Count: ", count)
+				err := os.Remove(name)
+				if err != nil {
+					panic(err)
+				}
+				return data2, nil
+			} else {
+				fmt.Println("Count: ", count)
+			}
+			return data2, nil // fmt.Errorf("error checking file %q: %v", name, err)
 		}
 	}
 
 	return data2, fmt.Errorf("quest %d not found", questId)
+}
+
+func FindQuestByName(questName string) *Quest {
+	found := new(Quest)
+
+	for _, e := range AllQuests {
+		if e.Name == questName {
+			found = &e
+		}
+	}
+	return found
 }

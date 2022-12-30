@@ -1,15 +1,19 @@
 package structure
 
+import "fmt"
+
 // Structure of an abstract location
 // Node represents some node in a graph
 type Node struct {
-	Id   int
-	Name string
-	Next []*Node
+	Id     int
+	Name   string
+	Next   []*Node
+	Quests []*Quest
 }
 
 type NodeOps interface {
 	AddChildToNodeByName(array []Node, name string, new_node *Node, z int)
+	AddQuestToNode(questId int)
 }
 
 func CreateArrOfNodes() []Node {
@@ -72,5 +76,21 @@ func (node *Node) AddChildToNodeByName(array []Node, name string, new_node *Node
 	z++
 	if z < 2 {
 		array[new_node.Id].AddChildToNodeByName(array, new_node.Name, node, z)
+	}
+}
+
+func (node *Node) AddQuestToNode(questId int) {
+	for _, e := range AllQuests {
+		if questId == e.QuestId {
+
+			node.Quests = append(node.Quests, &e)
+			fmt.Println("e ", node.Quests[0].Name, " ", e.Name, " ", node.Id)
+			//arr[node.Id].Quests = node.Quests
+
+			if len(node.Quests) == 1 {
+				fmt.Println("e", node.Quests[0].Name)
+			}
+			break
+		}
 	}
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	//"text-based-engine/structure"
 
 	"github.com/ullf/text-based-engine/structure"
 )
@@ -28,6 +29,12 @@ func main() {
 
 	//structure.AddChildToNodeByName(arr, "20", &elem1)
 	hero := structure.CreateHero("mark")
+	/*hero2, err := hero.ReStat()
+	if err != nil {
+		hero2 = structure.CreateHero("mark")
+	} else {
+		hero2.SetLocation(arr, hero2.GetLocationAsString())
+	}*/
 	hero.SetLocation(arr, "helsinki")
 	//hero.GetNearbyLocations(arr)
 	fmt.Println("\nlocation: ", hero.GetLocationAsString())
@@ -45,7 +52,7 @@ func main() {
 	steps := make([]structure.QuestStep, 0)
 
 	act3 := structure.CreateAction("lookup", 0)
-	act4 := structure.CreateAction("lookup", 0)
+	act4 := structure.CreateAction("get all quests", 2)
 	step3 := structure.CreateStep(&hero, &act3)
 	step4 := structure.CreateStep(&hero, &act4)
 	steps1 := make([]structure.QuestStep, 0)
@@ -57,19 +64,31 @@ func main() {
 	steps = append(steps, step)
 	steps = append(steps, step2)
 	//steps = append(steps, step)
-	q := structure.CreateQuest("first", "description 1", steps)
-	q2 := structure.CreateQuest("second", "description 2", steps1)
+	//q := structure.CreateQuest(&structure.AllQuests, "first", "description 1", steps)
+	q2 := structure.CreateQuest(&structure.AllQuests, "second", "description 2", steps1)
+	//fmt.Println("LEEEEEN: ", len(structure.AllQuests), structure.AllQuests[0].Name)
 	hlogs := new(structure.QuestLogs)
 	hh := *hlogs
 	//hlogs.Hlogs[0].Action = act.Action
-	hh = q.Do(&hero, 0, hh)
-	qq, err := q2.Check(1)
+	hh = q2.Do(&hero, q2.QuestId, hh)
+	fmt.Println("hh: ", hh)
+	hh, err := q2.Check(q2.QuestId)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(qq)
-	hero.Stat(arr)
-	tmp, _ := hero.ReStat()
-	fmt.Println(tmp)
-	//fmt.Println(q.Step[0].Action.Action)
+	fmt.Println("hh: ", hh)
+	arr[0].AddQuestToNode(1)
+	arr[0].AddQuestToNode(0)
+
+	arr[2].AddQuestToNode(0)
+	//fmt.Println("gg: ", arr[0].Quests[0].Name)
+	//fmt.Println("gg: ", arr[2].Quests[0].Name)
+
+	//fmt.Println("Quests of ", hero.GetLocationAsString(), " quests are: ", hero.GetAllQuestsInCurrentLocationAsStrings(arr))
+	//	tt := hero.Stat(arr)
+	//
+	// fmt.Println(tt.GetLocation())
+	// tmp, _ := hero.ReStat()
+	// fmt.Println("Tmp: ", tmp.Location.Next[0])
+	// fmt.Println(q.Step[0].Action.Action)
 }

@@ -4,13 +4,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strings"
 )
 
 type Hero struct {
 	Id         int    `json:"id"`
 	Name       string `json:"name"`
 	Location   *Node  `json:"location"`
-	TakenQuest *Quest `json:"takenQuest"`
+	TakenQuest int    `json:"takenQuest"`
 }
 
 type HeroFunctions interface {
@@ -144,8 +145,8 @@ func (hero *Hero) Stat(array []Node) Hero {
 	// Marshal the Hero struct into a JSON string
 	jsonData, err := json.Marshal(hero)
 	if err != nil {
-		// handle error
-		return *hero
+		panic(err)
+		//return *hero
 	}
 
 	// Write the JSON string to a file
@@ -180,14 +181,27 @@ func (hero *Hero) ReStat() (*Hero, error) {
 		return nil, err
 	}
 
-	// Unmarshal the byte slice into a Hero struct
+	// Convert the byte slice to a string and remove any null characters
+	jsonString := strings.Replace(string(data), "\x00", "", -1)
+
+	// Unmarshal the string into a Hero struct
 	var h Hero
-	err = json.Unmarshal(data, &h)
+	err = json.Unmarshal([]byte(jsonString), &h)
 	fmt.Println("h: ", h)
 	if err != nil {
 		fmt.Println("h err: ", err)
 		return nil, err
 	}
-
 	return &h, nil
+}
+
+func (hero *Hero) GetAllQuestsInCurrentLocationAsStrings(arr []Node) []string {
+	myLocation := hero.GetLocation()
+	fmt.Println("len: ", len(arr[myLocation.Id].Quests))
+	localQuests := make([]string, 0)
+	for _, e := range arr[myLocation.Id].Quests {
+		fmt.Println("second: ", e.Name)
+		localQuests = append(localQuests, e.Name)
+	}
+	return localQuests
 }

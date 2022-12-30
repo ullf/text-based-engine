@@ -1,0 +1,11 @@
+"filename", "language", "Go", "Go Module File", "Markdown", "comment", "blank", "total"
+"/home/marksismuz/go_workspace/src/text-based-engine/README.md", "Markdown", 0, 0, 1, 0, 1, 2
+"/home/marksismuz/go_workspace/src/text-based-engine/cmd/main/main.go", "Go", 56, 0, 0, 26, 13, 95
+"/home/marksismuz/go_workspace/src/text-based-engine/go.mod", "Go Module File", 0, 2, 0, 0, 2, 4
+"/home/marksismuz/go_workspace/src/text-based-engine/structure/hero.go", "Go", 167, 0, 0, 13, 28, 208
+"/home/marksismuz/go_workspace/src/text-based-engine/structure/hlogQuest.go", "Go", 77, 0, 0, 11, 17, 105
+"/home/marksismuz/go_workspace/src/text-based-engine/structure/inventory.go", "Go", 22, 0, 0, 0, 7, 29
+"/home/marksismuz/go_workspace/src/text-based-engine/structure/io_inventory.go", "Go", 24, 0, 0, 1, 3, 28
+"/home/marksismuz/go_workspace/src/text-based-engine/structure/node.go", "Go", 79, 0, 0, 4, 14, 97
+"/home/marksismuz/go_workspace/src/text-based-engine/structure/quest.go", "Go", 106, 0, 0, 9, 23, 138
+"Total", "-", 531, 2, 1, 64, 108, 706

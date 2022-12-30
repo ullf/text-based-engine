@@ -86,18 +86,19 @@ func (hl *QuestLogs) HWrite(data QuestLogs, filename string) {
 }
 
 func (hl *QuestLogs) HRead(filename string) QuestLogs {
-	file, err := os.Open(filename + ".json")
+	file, _ := os.Open(filename)
 	var output QuestLogs
-	if err != io.EOF {
-		// Decode the JSON data into a user object
-		decoder := json.NewDecoder(file)
-		if err := decoder.Decode(&output); err != nil && err != io.EOF {
-			panic(err)
-		}
-
-		//fmt.Println("decode: ", output)
-		defer file.Close()
-		return output
+	//if err != io.EOF {
+	// Decode the JSON data into a user object
+	decoder := json.NewDecoder(file)
+	if err := decoder.Decode(&output); err != nil && err != io.EOF {
+		panic(err)
 	}
+
+	fmt.Println("decode: ", output)
+	defer file.Close()
+	fmt.Println("decode: ", output)
 	return output
+	//}
+	//return output
 }
