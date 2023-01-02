@@ -7,6 +7,7 @@ import (
 	"strings"
 )
 
+//Hero representation
 type Hero struct {
 	Id         int    `json:"id"`
 	Name       string `json:"name"`
